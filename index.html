@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte: Categoría Café en Jumbo.cl</title>
+    <title>Benchmark Retail: Categoría Café (Jumbo vs Lider)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Chosen Palette: Warm Roast (stone-50 bg, stone-800 text, amber-900/orange-800 accents) -->
-    <!-- Application Structure Plan: The SPA is structured as a strategic dashboard. It moves from high-level overviews (Executive Summary) to specific breakdowns (Category Split, Brand Positioning, Consumer Trends). This top-down approach allows stakeholders to grasp the big picture immediately, then drill down into specific areas of interest using interactive charts and toggles. A sticky top navigation facilitates quick jumping between these logical sections. -->
+    <!-- Chosen Palette: Analytical Retail (stone-50 bg, stone-800 text, Jumbo Green #059669, Lider Blue #2563EB accents) -->
+    <!-- Application Structure Plan: The SPA is restructured as a Comparative Dashboard. It flows from high-level KPIs side-by-side, into deep dives of Assortment (Grano vs Molido), Price Architecture, and Brand Positioning. The side-by-side visual approach immediately highlights the core strategic differences (Jumbo's premium depth vs. Lider's mainstream/value efficiency). -->
     <!-- Visualization & Content Choices: 
-         1. Exec Summary -> Goal: Quick insights -> Viz: Dynamic numeric cards -> Interaction: None (static summary) -> Library: HTML/Tailwind.
-         2. Category Split (Grano vs Molido) -> Goal: Show proportion -> Viz: Doughnut Chart -> Interaction: Hover tooltips -> Library: Chart.js (NO SVG).
-         3. Price Segments -> Goal: Compare segments across sub-categories -> Viz: Grouped Bar Chart -> Interaction: Legend toggling -> Library: Chart.js (NO SVG).
-         4. Brand Positioning -> Goal: Map price vs premium perception -> Viz: Scatter Plot -> Interaction: Filter by category (Molido/Grano/All) -> Library: Chart.js (NO SVG).
-         5. Roast Preferences -> Goal: Show consumer taste distribution -> Viz: Polar Area Chart (more engaging than pie) -> Interaction: Hover tooltips -> Library: Chart.js (NO SVG).
+         1. Exec Summary -> Goal: Direct KPI comparison -> Viz: Side-by-side metric cards -> Interaction: None -> Library: HTML/Tailwind.
+         2. Assortment Strategy -> Goal: Compare format focus -> Viz: Grouped Bar Chart (replaces donut for better comparison) -> Interaction: Hover tooltips -> Library: Chart.js (NO SVG).
+         3. Price Architecture -> Goal: Show where each retailer plays -> Viz: Grouped Bar Chart across price tiers -> Interaction: Legend toggling -> Library: Chart.js (NO SVG).
+         4. Brand Map -> Goal: Identify retailer overlaps and exclusivities -> Viz: Scatter Plot -> Interaction: Filter by Retailer presence (Jumbo/Lider/Both) -> Library: Chart.js (NO SVG).
+         5. Strategic Trends -> Goal: Qualitative insights -> Viz: Text blocks with contextual emojis -> Interaction: None -> Library: HTML/Tailwind.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
     <style>
-        /* Strict Chart Container Styling as requested */
+        /* Strict Chart Container Styling */
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 700px;
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            height: 35vh; /* Responsive height */
-            min-height: 250px;
-            max-height: 400px;
+            height: 40vh; 
+            min-height: 300px;
+            max-height: 450px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -40,7 +40,7 @@
             }
         }
 
-        /* Custom Scrollbar for better aesthetics */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -54,6 +54,12 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #a8a29e; 
         }
+
+        /* Utility classes for retailer colors */
+        .text-jumbo { color: #059669; }
+        .bg-jumbo { background-color: #059669; }
+        .text-lider { color: #2563EB; }
+        .bg-lider { background-color: #2563EB; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans antialiased leading-relaxed">
@@ -62,18 +68,18 @@
     <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur shadow-sm border-b border-stone-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center font-bold text-xl text-amber-900">
-                    <span class="mr-2 text-2xl">&#9749;</span> Jumbo Café Insights
+                <div class="flex-shrink-0 flex items-center font-bold text-xl text-stone-800">
+                    <span class="mr-2 text-2xl">&#9749;</span> Retail Coffee Benchmark
                 </div>
                 <div class="hidden md:flex space-x-8">
-                    <button onclick="scrollToSection('resumen')" class="text-stone-600 hover:text-amber-900 px-3 py-2 text-sm font-medium transition-colors">Resumen</button>
-                    <button onclick="scrollToSection('distribucion')" class="text-stone-600 hover:text-amber-900 px-3 py-2 text-sm font-medium transition-colors">Distribución</button>
-                    <button onclick="scrollToSection('posicionamiento')" class="text-stone-600 hover:text-amber-900 px-3 py-2 text-sm font-medium transition-colors">Posicionamiento</button>
-                    <button onclick="scrollToSection('tendencias')" class="text-stone-600 hover:text-amber-900 px-3 py-2 text-sm font-medium transition-colors">Tendencias</button>
+                    <button onclick="scrollToSection('kpis')" class="text-stone-600 hover:text-stone-900 px-3 py-2 text-sm font-medium transition-colors">KPIs</button>
+                    <button onclick="scrollToSection('surtido')" class="text-stone-600 hover:text-stone-900 px-3 py-2 text-sm font-medium transition-colors">Surtido</button>
+                    <button onclick="scrollToSection('precios')" class="text-stone-600 hover:text-stone-900 px-3 py-2 text-sm font-medium transition-colors">Precios</button>
+                    <button onclick="scrollToSection('marcas')" class="text-stone-600 hover:text-stone-900 px-3 py-2 text-sm font-medium transition-colors">Marcas</button>
                 </div>
-                <!-- Mobile Menu Button (Simplified for standard interaction) -->
+                <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
-                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-stone-600 hover:text-amber-900 focus:outline-none">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-stone-600 focus:outline-none">
                         <span class="text-2xl">&#9776;</span>
                     </button>
                 </div>
@@ -82,122 +88,134 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-stone-200">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <button onclick="scrollToSection('resumen'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 hover:text-amber-900 px-3 py-2 rounded-md text-base font-medium">Resumen</button>
-                <button onclick="scrollToSection('distribucion'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 hover:text-amber-900 px-3 py-2 rounded-md text-base font-medium">Distribución</button>
-                <button onclick="scrollToSection('posicionamiento'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 hover:text-amber-900 px-3 py-2 rounded-md text-base font-medium">Posicionamiento</button>
-                <button onclick="scrollToSection('tendencias'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 hover:text-amber-900 px-3 py-2 rounded-md text-base font-medium">Tendencias</button>
+                <button onclick="scrollToSection('kpis'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 px-3 py-2 rounded-md font-medium">KPIs</button>
+                <button onclick="scrollToSection('surtido'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 px-3 py-2 rounded-md font-medium">Surtido</button>
+                <button onclick="scrollToSection('precios'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 px-3 py-2 rounded-md font-medium">Precios</button>
+                <button onclick="scrollToSection('marcas'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left text-stone-600 hover:bg-stone-100 px-3 py-2 rounded-md font-medium">Marcas</button>
             </div>
         </div>
     </nav>
 
-    <!-- Header / Hero -->
-    <header class="bg-amber-950 text-stone-100 py-16 lg:py-24">
+    <!-- Header -->
+    <header class="bg-stone-900 text-stone-100 py-16 lg:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Análisis de Categoría: Café</h1>
-            <p class="mt-4 max-w-2xl text-xl text-stone-300 mx-auto">Un estudio exhaustivo del surtido de café en grano y molido disponible en Jumbo.cl, enfocado en participación, precios y tendencias de "premiumización".</p>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+                <span class="text-jumbo">Jumbo</span> vs <span class="text-lider">Lider</span>: Guerra del Café
+            </h1>
+            <p class="mt-4 max-w-2xl text-xl text-stone-300 mx-auto">Análisis comparativo exhaustivo del catálogo online de café en grano y molido. Estrategias de premiumización vs. eficiencia de volumen.</p>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
 
-        <!-- Section 1: Executive Summary -->
-        <section id="resumen" class="scroll-mt-20">
+        <!-- Section 1: Executive Summary / KPIs -->
+        <section id="kpis" class="scroll-mt-20">
             <div class="mb-8">
-                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-amber-900 inline-block pb-2">Resumen Ejecutivo</h2>
-                <p class="mt-4 text-lg text-stone-600">Esta sección proporciona una vista rápida de los indicadores clave de rendimiento (KPIs) y hallazgos principales derivados del análisis del catálogo online de Jumbo. Permite entender de un vistazo el estado actual de la categoría.</p>
+                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-stone-300 inline-block pb-2">Comparativa de KPIs</h2>
+                <p class="mt-4 text-lg text-stone-600">Jumbo se posiciona como el destino para la exploración y el café de especialidad, mientras que Lider optimiza su surtido para el consumo masivo y el valor diario.</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Stat Cards -->
-                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 flex flex-col justify-center items-center text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <div class="text-3xl mb-2 text-amber-700">&#128200;</div>
-                    <dt class="text-sm font-medium text-stone-500 uppercase tracking-wide">Crecimiento Est. Grano</dt>
-                    <dd class="mt-1 text-4xl font-extrabold text-amber-900">+18%</dd>
-                    <p class="mt-2 text-xs text-stone-400">Interanual (Proyectado)</p>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 flex flex-col justify-center items-center text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <div class="text-3xl mb-2 text-amber-700">&#127991;&#65039;</div>
-                    <dt class="text-sm font-medium text-stone-500 uppercase tracking-wide">Marcas Únicas</dt>
-                    <dd class="mt-1 text-4xl font-extrabold text-amber-900">45+</dd>
-                    <p class="mt-2 text-xs text-stone-400">En catálogo actual</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Jumbo KPIs -->
+                <div class="bg-white rounded-xl shadow-sm border-t-4 border-t-[#059669] border border-stone-200 p-6">
+                    <h3 class="text-2xl font-bold text-jumbo mb-6 flex items-center">&#128722; Perfil Jumbo</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Marcas Únicas</p>
+                            <p class="text-3xl font-bold text-stone-800">45+</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Precio Promedio</p>
+                            <p class="text-3xl font-bold text-stone-800">$16.5k <span class="text-xs font-normal">/kg</span></p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Peso "En Grano"</p>
+                            <p class="text-3xl font-bold text-stone-800">42%</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Foco Estratégico</p>
+                            <p class="text-xl font-bold text-stone-800 mt-1">Premiumización</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 flex flex-col justify-center items-center text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <div class="text-3xl mb-2 text-amber-700">&#128176;</div>
-                    <dt class="text-sm font-medium text-stone-500 uppercase tracking-wide">Precio Promedio (Grano)</dt>
-                    <dd class="mt-1 text-4xl font-extrabold text-amber-900">$18k</dd>
-                    <p class="mt-2 text-xs text-stone-400">Por kg (Aprox)</p>
+                <!-- Lider KPIs -->
+                <div class="bg-white rounded-xl shadow-sm border-t-4 border-t-[#2563EB] border border-stone-200 p-6">
+                    <h3 class="text-2xl font-bold text-lider mb-6 flex items-center">&#128722; Perfil Lider</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Marcas Únicas</p>
+                            <p class="text-3xl font-bold text-stone-800">22+</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Precio Promedio</p>
+                            <p class="text-3xl font-bold text-stone-800">$11.2k <span class="text-xs font-normal">/kg</span></p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Peso "En Grano"</p>
+                            <p class="text-3xl font-bold text-stone-800">15%</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-stone-500 uppercase tracking-wide">Foco Estratégico</p>
+                            <p class="text-xl font-bold text-stone-800 mt-1">Volumen & EDLP</p>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 flex flex-col justify-center items-center text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <div class="text-3xl mb-2 text-amber-700">&#11088;</div>
-                    <dt class="text-sm font-medium text-stone-500 uppercase tracking-wide">Segmento Dominante</dt>
-                    <dd class="mt-1 text-2xl font-extrabold text-amber-900 mt-2">Premium</dd>
-                    <p class="mt-2 text-xs text-stone-400">Mayor % de SKUs</p>
-                </div>
-            </div>
-
-            <div class="mt-8 bg-amber-50 rounded-xl p-6 border-l-4 border-amber-900">
-                <h3 class="text-lg font-bold text-amber-900 mb-2">Hallazgo Principal</h3>
-                <p class="text-stone-700">Se observa una clara estrategia de <strong>"Premiumización"</strong>. Aunque el café molido mantiene el volumen masivo, el espacio en anaquel (digital y físico) para el <strong>café en grano</strong> y especialidades está creciendo agresivamente, impulsado por la adopción de máquinas espresso caseras post-pandemia.</p>
             </div>
         </section>
 
-        <!-- Section 2: Distribution & Market Share -->
-        <section id="distribucion" class="scroll-mt-20">
+        <!-- Section 2: Assortment & Price Architecture -->
+        <section id="surtido" class="scroll-mt-20">
             <div class="mb-8">
-                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-amber-900 inline-block pb-2">Distribución de Categoría</h2>
-                <p class="mt-4 text-lg text-stone-600">Analizamos cómo se divide el espacio virtual en Jumbo.cl entre las diferentes presentaciones de café y cómo se distribuyen estas presentaciones a través de los distintos segmentos de precio.</p>
+                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-stone-300 inline-block pb-2">Arquitectura de Surtido y Precios</h2>
+                <p class="mt-4 text-lg text-stone-600">Comparamos cómo cada retailer distribuye su espacio digital entre formatos (Grano vs Molido) y en qué segmentos de precio concentran su oferta.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Chart 1 -->
+                <!-- Assortment Chart -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold text-stone-800">Grano vs. Molido (% de SKUs)</h3>
-                        <button id="toggleMetricBtn" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 py-1 px-3 rounded border border-stone-300 transition-colors">
-                            Ver Estimación Ventas
-                        </button>
-                    </div>
-                    <p class="text-sm text-stone-500 mb-4 h-10" id="shareDescription">Proporción de productos distintos ofrecidos en la plataforma.</p>
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">Composición del Catálogo (SKUs)</h3>
+                    <p class="text-sm text-stone-500 mb-6">Lider destina el 85% de su oferta al formato Molido tradicional, mientras Jumbo balancea su surtido impulsando fuertemente el Grano entero.</p>
                     <div class="chart-container">
-                        <canvas id="marketShareChart"></canvas>
+                        <canvas id="assortmentChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Chart 2 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
-                    <h3 class="text-xl font-bold text-stone-800 mb-4">Distribución por Segmento de Precio</h3>
-                    <p class="text-sm text-stone-500 mb-4 h-10">Diferencia estratégica: El café en grano se enfoca fuertemente en el segmento premium y especialidad.</p>
+                <!-- Price Tiers Chart -->
+                <div id="precios" class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 scroll-mt-20">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">Concentración por Segmento de Precio</h3>
+                    <p class="text-sm text-stone-500 mb-6">El "vientre" de Lider está en los segmentos Económico/Medio. Jumbo domina en Premium y Especialidad.</p>
                     <div class="chart-container">
-                        <canvas id="priceSegmentChart"></canvas>
+                        <canvas id="priceTiersChart"></canvas>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Brand Positioning -->
-        <section id="posicionamiento" class="scroll-mt-20">
+        <!-- Section 3: Brand Positioning Mapping -->
+        <section id="marcas" class="scroll-mt-20">
             <div class="mb-8">
-                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-amber-900 inline-block pb-2">Posicionamiento de Marcas</h2>
-                <p class="mt-4 text-lg text-stone-600">Este gráfico de dispersión interactivo mapea las principales marcas encontradas en Jumbo según su índice de precio relativo y su percepción de calidad/premiumness. Utilice los botones para filtrar por el tipo de formato principal de la marca.</p>
+                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-stone-300 inline-block pb-2">Mapa de Marcas Cruzado</h2>
+                <p class="mt-4 text-lg text-stone-600">Este gráfico sitúa las marcas principales. Use los filtros para visualizar qué marcas son exclusivas de un supermercado o compartidas, revelando la estrategia de captación de cada uno.</p>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-                    <h3 class="text-xl font-bold text-stone-800">Mapa Competitivo</h3>
+                    <h3 class="text-xl font-bold text-stone-800">Posicionamiento Precio vs Percepción</h3>
                     
                     <!-- Interactive Filters -->
                     <div class="mt-4 sm:mt-0 inline-flex rounded-md shadow-sm" role="group">
-                        <button type="button" onclick="filterBrands('Todos')" id="btn-Todos" class="px-4 py-2 text-sm font-medium bg-amber-900 text-white border border-amber-900 rounded-l-lg hover:bg-amber-800 focus:z-10 focus:ring-2 focus:ring-amber-500 transition-colors">
-                            Todos
+                        <button type="button" onclick="filterRetailer('Todos')" id="btn-Todos" class="px-4 py-2 text-sm font-medium bg-stone-800 text-white border border-stone-800 rounded-l-lg hover:bg-stone-700 transition-colors">
+                            Ver Todas
                         </button>
-                        <button type="button" onclick="filterBrands('Grano')" id="btn-Grano" class="px-4 py-2 text-sm font-medium bg-white text-stone-700 border-t border-b border-r border-stone-200 hover:bg-stone-50 focus:z-10 focus:ring-2 focus:ring-amber-500 transition-colors">
-                            Fuerte en Grano
+                        <button type="button" onclick="filterRetailer('Jumbo')" id="btn-Jumbo" class="px-4 py-2 text-sm font-medium bg-white text-[#059669] border-t border-b border-r border-stone-200 hover:bg-stone-50 transition-colors">
+                            Solo en Jumbo
                         </button>
-                        <button type="button" onclick="filterBrands('Molido')" id="btn-Molido" class="px-4 py-2 text-sm font-medium bg-white text-stone-700 border-t border-b border-r border-stone-200 rounded-r-lg hover:bg-stone-50 focus:z-10 focus:ring-2 focus:ring-amber-500 transition-colors">
-                            Fuerte en Molido
+                        <button type="button" onclick="filterRetailer('Lider')" id="btn-Lider" class="px-4 py-2 text-sm font-medium bg-white text-[#2563EB] border-t border-b border-r border-stone-200 hover:bg-stone-50 transition-colors">
+                            Solo en Lider
+                        </button>
+                        <button type="button" onclick="filterRetailer('Ambos')" id="btn-Ambos" class="px-4 py-2 text-sm font-medium bg-white text-stone-700 border-t border-b border-r border-stone-200 rounded-r-lg hover:bg-stone-50 transition-colors">
+                            Compartidas
                         </button>
                     </div>
                 </div>
@@ -206,349 +224,234 @@
                     <canvas id="brandScatterChart"></canvas>
                 </div>
                 
-                <div class="mt-6 text-sm text-stone-600 bg-stone-50 p-4 rounded text-center">
-                    <span class="font-bold">Lectura:</span> Marcas en el cuadrante superior derecho (alto precio, alta percepción) dominan el segmento de especialidad. Marcas en el inferior izquierdo dominan el consumo diario masivo.
+                <div class="mt-6 text-sm text-stone-600 bg-stone-50 p-4 rounded border border-stone-200 flex items-start">
+                    <span class="text-xl mr-3">&#128161;</span>
+                    <p><strong>Insight Analítico:</strong> Las marcas compartidas (ej. Nescafé, Cruzeiro, Marley) representan la "cesta básica" competitiva. Lider ataca la base de la pirámide con su Marca Propia ("Selección Lider"), mientras Jumbo expande el techo del mercado incorporando micro-tostadores locales (ej. Señor K, Café Cultura) que Lider no maneja.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section 4: Trends -->
-        <section id="tendencias" class="scroll-mt-20">
-            <div class="mb-8">
-                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-amber-900 inline-block pb-2">Tendencias y Preferencias</h2>
-                <p class="mt-4 text-lg text-stone-600">Análisis cualitativo basado en la composición del catálogo, descripciones de productos y sellos de certificación encontrados en la plataforma.</p>
+        <!-- Section 4: Qualitative Insights -->
+        <section class="scroll-mt-20">
+             <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 border-b-2 border-stone-300 inline-block pb-2">Conclusiones Estratégicas</h2>
             </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Polar Chart -->
-                <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
-                    <h3 class="text-xl font-bold text-stone-800 mb-2">Oferta por Nivel de Tueste</h3>
-                    <p class="text-xs text-stone-500 mb-4">El mercado chileno transita hacia tuestes más claros, aunque el medio sigue dominando.</p>
-                    <div class="chart-container">
-                        <canvas id="roastPolarChart"></canvas>
-                    </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-stone-200 border-l-4 border-l-[#059669] shadow-sm">
+                    <h4 class="text-lg font-bold text-stone-800 mb-2 flex items-center">
+                        <span class="mr-2 text-xl">&#127919;</span> La Estrategia Jumbo
+                    </h4>
+                    <p class="text-stone-600">Jumbo actúa como un <strong>"Curador de Especialidad"</strong>. Apuesta fuertemente por la adopción de cafeteras espresso y métodos manuales en el hogar. Su rentabilidad en la categoría no viene por volumen masivo, sino por altos márgenes en cafés de origen único, certificaciones orgánicas y formatos en grano entero sobre los $20.000 el kilo.</p>
                 </div>
 
-                <!-- Textual Trends -->
-                <div class="lg:col-span-2 flex flex-col justify-between space-y-6">
-                    
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 hover:border-amber-500 transition-colors cursor-default">
-                        <div class="flex items-center mb-3">
-                            <span class="text-2xl mr-3">&#127758;</span>
-                            <h4 class="text-xl font-bold text-stone-800">Origen Único vs. Blends</h4>
-                        </div>
-                        <p class="text-stone-600">Aumento notable del <strong>35%</strong> en la oferta de cafés de "Origen Único" (Single Origin), principalmente de Colombia, Perú y Etiopía. Los consumidores buscan perfiles de sabor específicos (frutales, ácidos) por sobre los blends tradicionales (chocolatados/amargos).</p>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 hover:border-amber-500 transition-colors cursor-default">
-                        <div class="flex items-center mb-3">
-                            <span class="text-2xl mr-3">&#127807;</span>
-                            <h4 class="text-xl font-bold text-stone-800">Certificaciones y Sostenibilidad</h4>
-                        </div>
-                        <p class="text-stone-600">Los sellos <strong>Orgánico, Fairtrade (Comercio Justo) y Rainforest Alliance</strong> ya no son un nicho, sino un estándar esperado en el segmento de Precio Medio hacia arriba. Marcas como Marley Coffee y Juan Valdez apalancan fuertemente este atributo en Jumbo.</p>
-                    </div>
-
-                     <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 hover:border-amber-500 transition-colors cursor-default">
-                        <div class="flex items-center mb-3">
-                            <span class="text-2xl mr-3">&#9881;&#65039;</span>
-                            <h4 class="text-xl font-bold text-stone-800">Evolución del Equipamiento</h4>
-                        </div>
-                        <p class="text-stone-600">El crecimiento del café en grano está directamente correlacionado con la venta de molinos manuales y máquinas espresso automáticas. El empaque refleja esto con válvulas desgasificadoras más prominentes y sugerencias de molienda.</p>
-                    </div>
-
+                <div class="bg-white p-6 rounded-xl border border-stone-200 border-l-4 border-l-[#2563EB] shadow-sm">
+                    <h4 class="text-lg font-bold text-stone-800 mb-2 flex items-center">
+                        <span class="mr-2 text-xl">&#128200;</span> La Estrategia Lider
+                    </h4>
+                    <p class="text-stone-600">Lider ejecuta una estrategia de <strong>"Eficiencia de Categoría"</strong>. Reduce la complejidad eliminando la "larga cola" de marcas premium de baja rotación. Consolida su volumen de ventas en marcas tradicionales de molido (Nescafé, Gold) y utiliza su robusta línea de Marca Propia para ofrecer la opción más económica de la góndola, protegiendo su promesa EDLP.</p>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-stone-900 text-stone-400 py-10 text-center mt-12 border-t border-amber-900/30">
+    <footer class="bg-stone-900 text-stone-400 py-10 text-center mt-12 border-t border-stone-800">
         <div class="max-w-7xl mx-auto px-4">
-            <p class="mb-2">Análisis de Mercado Simulado - Categoría Café Jumbo.cl</p>
-            <p class="text-sm">Datos generados para propósitos de demostración analítica y diseño de interfaz.</p>
-            <div class="mt-4 flex justify-center space-x-4">
-                <span class="text-xl">&#9749;</span>
-                <span class="text-xl">&#128202;</span>
-                <span class="text-xl">&#128187;</span>
-            </div>
+            <p class="mb-2">Benchmark Retail Simulado - Jumbo vs Lider (Categoría Café)</p>
+            <p class="text-sm">Datos generados para propósitos de demostración analítica.</p>
         </div>
     </footer>
 
     <!-- Application Logic -->
     <script>
-        // --- Data Storage ---
-        // Simulated data based on typical premium supermarket structures
-        const chartColors = {
-            grano: '#78350F', // amber-900
-            molido: '#D97706', // amber-600
-            light: '#FDE68A', // amber-200
-            dark: '#451A03',  // orange-950
-            gray: '#E7E5E4'   // stone-200
+        // --- Data Definitions ---
+        const colors = {
+            jumbo: '#059669', // emerald-600
+            jumboLight: 'rgba(5, 150, 105, 0.2)',
+            lider: '#2563EB', // blue-600
+            liderLight: 'rgba(37, 99, 235, 0.2)',
+            gray: '#E7E5E4',
+            dark: '#1C1917'
         };
 
         const dataState = {
-            marketShare: {
-                currentMode: 'sku', // 'sku' or 'revenue'
-                sku: { labels: ['Café Molido', 'Café en Grano'], data: [58, 42], subtitle: 'Proporción de productos distintos (SKUs) en el catálogo.' },
-                revenue: { labels: ['Café Molido', 'Café en Grano'], data: [45, 55], subtitle: 'Estimación de ingresos generados (El grano tiene mayor ticket promedio).' }
+            assortment: {
+                labels: ['Café Molido', 'Café en Grano'],
+                jumboData: [58, 42],
+                liderData: [85, 15]
             },
-            priceSegments: {
-                labels: ['Económico (<$8k/kg)', 'Medio ($8k-$14k/kg)', 'Premium ($14k-$22k/kg)', 'Especialidad (>$22k/kg)'],
-                molidoData: [45, 40, 12, 3],
-                granoData: [5, 20, 55, 20]
+            priceTiers: {
+                labels: ['Económico (<$8k)', 'Medio ($8k-$14k)', 'Premium ($14k-$22k)', 'Especialidad (>$22k)'],
+                jumboData: [15, 30, 40, 15],
+                liderData: [45, 40, 12, 3]
             },
             brandsData: [
-                // x: Relative Price Index (0-100), y: Premium Perception Index (0-100)
-                { label: 'Marley Coffee', data: [{x: 82, y: 88}], type: 'Ambos', color: '#10B981' }, // Greenish for organic vibe
-                { label: 'Lavazza', data: [{x: 85, y: 85}], type: 'Ambos', color: '#1D4ED8' },
-                { label: 'Juan Valdez', data: [{x: 75, y: 78}], type: 'Grano', color: '#B91C1C' },
-                { label: 'Nescafé Fina Sel.', data: [{x: 55, y: 50}], type: 'Molido', color: '#451A03' },
-                { label: 'Nescafé Trad.', data: [{x: 25, y: 20}], type: 'Molido', color: '#78350F' },
-                { label: 'Gold', data: [{x: 45, y: 45}], type: 'Molido', color: '#D4AF37' },
-                { label: 'Señor K', data: [{x: 95, y: 92}], type: 'Grano', color: '#111827' },
-                { label: 'Britt', data: [{x: 80, y: 75}], type: 'Grano', color: '#047857' },
-                { label: 'Cruzeiro', data: [{x: 35, y: 30}], type: 'Molido', color: '#DC2626' }
-            ],
-            roastData: {
-                labels: ['Tueste Medio (Balanceado)', 'Tueste Oscuro (Intenso)', 'Tueste Claro (Ácido/Frutal)'],
-                data: [60, 25, 15]
-            }
+                // x: Rel Price (0-100), y: Premium Perception (0-100), r: Bubble size (importance)
+                { label: 'Selección Lider', data: [{x: 20, y: 30, r: 8}], retailer: 'Lider', color: colors.lider },
+                { label: 'Cruzeiro', data: [{x: 35, y: 30, r: 10}], retailer: 'Ambos', color: '#6B7280' },
+                { label: 'Nescafé Tradición', data: [{x: 25, y: 20, r: 15}], retailer: 'Ambos', color: '#6B7280' },
+                { label: 'Gold', data: [{x: 45, y: 45, r: 12}], retailer: 'Ambos', color: '#6B7280' },
+                { label: 'Lavazza', data: [{x: 85, y: 85, r: 8}], retailer: 'Ambos', color: '#6B7280' },
+                { label: 'Juan Valdez', data: [{x: 75, y: 78, r: 10}], retailer: 'Ambos', color: '#6B7280' },
+                { label: 'Marley Coffee', data: [{x: 82, y: 88, r: 12}], retailer: 'Ambos', color: '#6B7280' },
+                { label: 'Señor K', data: [{x: 95, y: 92, r: 6}], retailer: 'Jumbo', color: colors.jumbo },
+                { label: 'Café Cultura', data: [{x: 98, y: 95, r: 5}], retailer: 'Jumbo', color: colors.jumbo },
+                { label: 'Britt', data: [{x: 80, y: 75, r: 7}], retailer: 'Jumbo', color: colors.jumbo },
+                { label: 'Lider Orgánico', data: [{x: 50, y: 60, r: 6}], retailer: 'Lider', color: colors.lider }
+            ]
         };
 
-        // --- Chart Instances ---
-        let shareChartObj, scatterChartObj;
+        let scatterChartObj;
 
         // --- Common Chart Options ---
         Chart.defaults.font.family = "'Inter', 'system-ui', 'sans-serif'";
-        Chart.defaults.color = '#57534E'; // stone-500
+        Chart.defaults.color = '#57534E';
         
         const baseOptions = {
             responsive: true,
-            maintainAspectRatio: false, // CRITICAL: Allows the chart to fill the custom container
+            maintainAspectRatio: false, // Ensures it fits the CSS container
             plugins: {
-                legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } },
-                tooltip: { backgroundColor: 'rgba(41, 37, 36, 0.9)', padding: 12, cornerRadius: 8 }
+                legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                tooltip: { backgroundColor: 'rgba(28, 25, 23, 0.9)', padding: 10, cornerRadius: 6 }
             }
         };
 
-        // --- Initialization on DOM Content Loaded ---
+        // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
-            initMarketShareChart();
-            initPriceSegmentChart();
+            initAssortmentChart();
+            initPriceTiersChart();
             initBrandScatterChart();
-            initRoastPolarChart();
         });
 
-        // --- Navigation Logic ---
+        // Navigation
         function scrollToSection(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
+            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // --- Chart 1: Market Share (Donut) ---
-        function initMarketShareChart() {
-            const ctx = document.getElementById('marketShareChart').getContext('2d');
-            shareChartObj = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: dataState.marketShare.sku.labels,
-                    datasets: [{
-                        data: dataState.marketShare.sku.data,
-                        backgroundColor: [chartColors.molido, chartColors.grano],
-                        borderWidth: 0,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    ...baseOptions,
-                    cutout: '65%',
-                    plugins: {
-                        ...baseOptions.plugins,
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) { return ` ${context.label}: ${context.raw}%`; }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Interactive Toggle Logic
-            const toggleBtn = document.getElementById('toggleMetricBtn');
-            const descEl = document.getElementById('shareDescription');
-
-            toggleBtn.addEventListener('click', () => {
-                const isSkuMode = dataState.marketShare.currentMode === 'sku';
-                const newData = isSkuMode ? dataState.marketShare.revenue : dataState.marketShare.sku;
-                
-                // Update State
-                dataState.marketShare.currentMode = isSkuMode ? 'revenue' : 'sku';
-                
-                // Update UI
-                toggleBtn.innerText = isSkuMode ? 'Ver SKUs en Catálogo' : 'Ver Estimación Ventas';
-                toggleBtn.classList.toggle('bg-amber-100');
-                toggleBtn.classList.toggle('text-amber-900');
-                descEl.innerText = newData.subtitle;
-                
-                // Update Chart
-                shareChartObj.data.datasets[0].data = newData.data;
-                shareChartObj.update();
-            });
-        }
-
-        // --- Chart 2: Price Segments (Grouped Bar) ---
-        function initPriceSegmentChart() {
-            const ctx = document.getElementById('priceSegmentChart').getContext('2d');
+        // --- Chart 1: Assortment ---
+        function initAssortmentChart() {
+            const ctx = document.getElementById('assortmentChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: dataState.priceSegments.labels,
+                    labels: dataState.assortment.labels,
                     datasets: [
-                        {
-                            label: 'Café Molido',
-                            data: dataState.priceSegments.molidoData,
-                            backgroundColor: chartColors.molido,
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Café en Grano',
-                            data: dataState.priceSegments.granoData,
-                            backgroundColor: chartColors.grano,
-                            borderRadius: 4
-                        }
+                        { label: 'Jumbo (%)', data: dataState.assortment.jumboData, backgroundColor: colors.jumbo, borderRadius: 4 },
+                        { label: 'Lider (%)', data: dataState.assortment.liderData, backgroundColor: colors.lider, borderRadius: 4 }
                     ]
                 },
                 options: {
                     ...baseOptions,
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: '% de Oferta en el Segmento' },
-                            grid: { color: chartColors.gray, borderDash: [5, 5] }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: {
-                                // Simple label wrapping for x-axis
-                                callback: function(value, index, values) {
-                                    const label = this.getLabelForValue(value);
-                                    if (label.length > 15) {
-                                        return label.split(' ('); // Split name and price
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
+                        y: { beginAtZero: true, max: 100, grid: { color: colors.gray, borderDash: [5, 5] }, title: { display: true, text: '% del Total de SKUs' } },
+                        x: { grid: { display: false } }
                     }
                 }
             });
         }
 
-        // --- Chart 3: Brand Positioning (Scatter) ---
+        // --- Chart 2: Price Tiers ---
+        function initPriceTiersChart() {
+            const ctx = document.getElementById('priceTiersChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dataState.priceTiers.labels,
+                    datasets: [
+                        { label: 'Jumbo (%)', data: dataState.priceTiers.jumboData, backgroundColor: colors.jumbo, borderRadius: 4 },
+                        { label: 'Lider (%)', data: dataState.priceTiers.liderData, backgroundColor: colors.lider, borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    ...baseOptions,
+                    scales: {
+                        y: { beginAtZero: true, max: 50, grid: { color: colors.gray, borderDash: [5, 5] }, title: { display: true, text: '% de Oferta en Segmento' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // --- Chart 3: Brand Scatter ---
         function initBrandScatterChart() {
             const ctx = document.getElementById('brandScatterChart').getContext('2d');
+            
+            // Format data for bubble/scatter
+            const datasets = dataState.brandsData.map(brand => ({
+                label: brand.label,
+                data: brand.data,
+                backgroundColor: brand.color,
+                borderColor: brand.color,
+                borderWidth: 1,
+                pointRadius: brand.data[0].r,
+                pointHoverRadius: brand.data[0].r + 3,
+                retailerAttr: brand.retailer 
+            }));
+
             scatterChartObj = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: dataState.brandsData.map(brand => ({
-                        label: brand.label,
-                        data: brand.data,
-                        backgroundColor: brand.color,
-                        pointRadius: 8,
-                        pointHoverRadius: 12,
-                        typeAttr: brand.type // Custom attribute for filtering
-                    }))
-                },
+                type: 'bubble', // Using bubble to allow variable point sizes
+                data: { datasets: datasets },
                 options: {
                     ...baseOptions,
                     plugins: {
                         ...baseOptions.plugins,
+                        legend: { display: false }, // Custom legend handled by buttons
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return `${context.dataset.label} (Precio: ${context.parsed.x}, Percepción: ${context.parsed.y})`;
+                                    const rName = context.dataset.retailerAttr;
+                                    return `${context.dataset.label} (Disp: ${rName}) | Precio: ${context.parsed.x}, Perc: ${context.parsed.y}`;
                                 }
                             }
-                        },
-                        legend: { display: false } // Hide legend to avoid clutter, using tooltips instead
+                        }
                     },
                     scales: {
-                        x: {
-                            title: { display: true, text: 'Índice de Precio Relativo' },
-                            min: 0, max: 100,
-                            grid: { color: chartColors.gray }
-                        },
-                        y: {
-                            title: { display: true, text: 'Percepción Premium / Calidad' },
-                            min: 0, max: 100,
-                            grid: { color: chartColors.gray }
-                        }
+                        x: { title: { display: true, text: 'Índice de Precio Relativo (0-100)' }, min: 0, max: 105, grid: { color: colors.gray } },
+                        y: { title: { display: true, text: 'Percepción Premium (0-100)' }, min: 0, max: 105, grid: { color: colors.gray } }
                     }
                 }
             });
         }
 
-        // Interactive Filter Logic for Scatter Chart
-        function filterBrands(category) {
-            // Update button styles
-            const buttons = ['btn-Todos', 'btn-Grano', 'btn-Molido'];
-            buttons.forEach(btnId => {
-                const btn = document.getElementById(btnId);
-                if (btnId === `btn-${category}`) {
-                    btn.classList.remove('bg-white', 'text-stone-700');
-                    btn.classList.add('bg-amber-900', 'text-white');
-                } else {
-                    btn.classList.remove('bg-amber-900', 'text-white');
-                    btn.classList.add('bg-white', 'text-stone-700');
-                }
+        // Interactive Filter Logic
+        function filterRetailer(retailer) {
+            // Button Styles Update
+            const btns = {
+                'Todos': { id: 'btn-Todos', activeBg: 'bg-stone-800', activeText: 'text-white' },
+                'Jumbo': { id: 'btn-Jumbo', activeBg: 'bg-emerald-600', activeText: 'text-white', hex: '#059669' },
+                'Lider': { id: 'btn-Lider', activeBg: 'bg-blue-600', activeText: 'text-white', hex: '#2563EB' },
+                'Ambos': { id: 'btn-Ambos', activeBg: 'bg-stone-600', activeText: 'text-white' }
+            };
+
+            // Reset all buttons to default inactive state
+            Object.keys(btns).forEach(key => {
+                const b = document.getElementById(btns[key].id);
+                b.className = `px-4 py-2 text-sm font-medium bg-white border-t border-b border-r border-stone-200 hover:bg-stone-50 transition-colors ${key === 'Todos' ? 'border-l rounded-l-lg' : ''} ${key === 'Ambos' ? 'rounded-r-lg' : ''}`;
+                
+                // Keep the text color hints for inactive state
+                if(key === 'Jumbo') b.classList.add('text-[#059669]');
+                else if (key === 'Lider') b.classList.add('text-[#2563EB]');
+                else b.classList.add('text-stone-700');
             });
 
-            // Filter chart data
+            // Apply active styles
+            const activeBtn = document.getElementById(btns[retailer].id);
+            activeBtn.className = `px-4 py-2 text-sm font-medium ${btns[retailer].activeBg} ${btns[retailer].activeText} border-t border-b border-r border-transparent transition-colors ${retailer === 'Todos' ? 'rounded-l-lg' : ''} ${retailer === 'Ambos' ? 'rounded-r-lg' : ''}`;
+
+            // Filter Chart
             scatterChartObj.data.datasets.forEach(dataset => {
-                if (category === 'Todos' || dataset.typeAttr === 'Ambos' || dataset.typeAttr === category) {
+                if (retailer === 'Todos') {
                     dataset.hidden = false;
-                } else {
-                    dataset.hidden = true;
+                } else if (retailer === 'Jumbo') {
+                    dataset.hidden = dataset.retailerAttr !== 'Jumbo';
+                } else if (retailer === 'Lider') {
+                    dataset.hidden = dataset.retailerAttr !== 'Lider';
+                } else if (retailer === 'Ambos') {
+                    dataset.hidden = dataset.retailerAttr !== 'Ambos';
                 }
             });
             scatterChartObj.update();
-        }
-
-        // --- Chart 4: Roast Preferences (Polar Area) ---
-        function initRoastPolarChart() {
-            const ctx = document.getElementById('roastPolarChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'polarArea',
-                data: {
-                    labels: dataState.roastData.labels,
-                    datasets: [{
-                        data: dataState.roastData.data,
-                        backgroundColor: [
-                            chartColors.molido, // Medio
-                            chartColors.grano,  // Oscuro
-                            chartColors.light   // Claro
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    ...baseOptions,
-                    scales: {
-                        r: {
-                            ticks: { display: false },
-                            grid: { color: chartColors.gray }
-                        }
-                    },
-                    plugins: {
-                        ...baseOptions.plugins,
-                        legend: { position: 'right' }
-                    }
-                }
-            });
         }
     </script>
 </body>
