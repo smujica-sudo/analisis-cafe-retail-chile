@@ -126,7 +126,7 @@
                         </div>
                         <div class="bg-stone-50 p-4 rounded-lg text-center">
                             <p class="text-sm text-stone-500 uppercase tracking-wide">Precio Promedio</p>
-                            <p class="text-3xl font-bold text-stone-800">$16.5k <span class="text-xs font-normal">/kg</span></p>
+                            <p class="text-3xl font-bold text-stone-800">$32.5k <span class="text-xs font-normal">/kg</span></p>
                         </div>
                         <div class="bg-stone-50 p-4 rounded-lg text-center">
                             <p class="text-sm text-stone-500 uppercase tracking-wide">Peso "En Grano"</p>
@@ -149,7 +149,7 @@
                         </div>
                         <div class="bg-stone-50 p-4 rounded-lg text-center">
                             <p class="text-sm text-stone-500 uppercase tracking-wide">Precio Promedio</p>
-                            <p class="text-3xl font-bold text-stone-800">$11.2k <span class="text-xs font-normal">/kg</span></p>
+                            <p class="text-3xl font-bold text-stone-800">$18.5k <span class="text-xs font-normal">/kg</span></p>
                         </div>
                         <div class="bg-stone-50 p-4 rounded-lg text-center">
                             <p class="text-sm text-stone-500 uppercase tracking-wide">Peso "En Grano"</p>
@@ -184,7 +184,7 @@
                 <!-- Price Tiers Chart -->
                 <div id="precios" class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 scroll-mt-20">
                     <h3 class="text-xl font-bold text-stone-800 mb-2">Concentración por Segmento de Precio</h3>
-                    <p class="text-sm text-stone-500 mb-6">El "vientre" de Lider está en los segmentos Económico/Medio. Jumbo domina en Premium y Especialidad.</p>
+                    <p class="text-sm text-stone-500 mb-6">El "vientre" de Lider está en los segmentos Económico/Medio (&lt;$25k/kg). Jumbo domina fuertemente en Premium y Especialidad (&gt;$25k/kg).</p>
                     <div class="chart-container">
                         <canvas id="priceTiersChart"></canvas>
                     </div>
@@ -242,7 +242,7 @@
                     <h4 class="text-lg font-bold text-stone-800 mb-2 flex items-center">
                         <span class="mr-2 text-xl">&#127919;</span> La Estrategia Jumbo
                     </h4>
-                    <p class="text-stone-600">Jumbo actúa como un <strong>"Curador de Especialidad"</strong>. Apuesta fuertemente por la adopción de cafeteras espresso y métodos manuales en el hogar. Su rentabilidad en la categoría no viene por volumen masivo, sino por altos márgenes en cafés de origen único, certificaciones orgánicas y formatos en grano entero sobre los $20.000 el kilo.</p>
+                    <p class="text-stone-600">Jumbo actúa como un <strong>"Curador de Especialidad"</strong>. Apuesta fuertemente por la adopción de cafeteras espresso y métodos manuales en el hogar. Su rentabilidad en la categoría no viene por volumen masivo, sino por altos márgenes en cafés de origen único, certificaciones orgánicas y formatos en grano entero sobre los $35.000 el kilo.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl border border-stone-200 border-l-4 border-l-[#2563EB] shadow-sm">
@@ -282,9 +282,9 @@
                 liderData: [85, 15]
             },
             priceTiers: {
-                labels: ['Económico (<$8k)', 'Medio ($8k-$14k)', 'Premium ($14k-$22k)', 'Especialidad (>$22k)'],
-                jumboData: [15, 30, 40, 15],
-                liderData: [45, 40, 12, 3]
+                labels: ['Económico (<$15k)', 'Medio ($15k-$25k)', 'Premium ($25k-$35k)', 'Especialidad (>$35k)'],
+                jumboData: [10, 25, 45, 20],
+                liderData: [55, 35, 8, 2]
             },
             brandsData: [
                 // x: Rel Price (0-100), y: Premium Perception (0-100), r: Bubble size (importance)
